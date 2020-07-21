@@ -28,8 +28,10 @@ function jet_engine_cvc() {
 	add_action( 'jet-engine/modules/dynamic-visibility/conditions/register', function( $conditions_manager ) {
 
 		require JET_ECVC_PATH . 'post-status.php';
+		require JET_ECVC_PATH . 'post-by-user.php';
 
 		$conditions_manager->register_condition( new Jet_Engine_CVC\Post_Status() );
+		$conditions_manager->register_condition( new Jet_Engine_CVC\Post_By_User() );
 
 	} );
 
