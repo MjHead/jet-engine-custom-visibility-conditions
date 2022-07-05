@@ -156,13 +156,13 @@ class User_Has_Fields extends \Jet_Engine\Modules\Dynamic_Visibility\Conditions\
 		return array(
 			'fields_list' => array(
 				'label'       => __( 'Fields list', 'jet-engine' ),
-				'type'        => \Elementor\Controls_Manager::TEXTAREA,
+				'type'        => 'textarea',
 				'default'     => '',
 				'description' => __( 'Comma-separated user fields list to check. Allowed fields: first_name, last_name, description, user_nicename, user_url or any custom user meta field key. Condition will be passed if user has filled all of the given fields', 'jet-engine' )
 			),
 			'user_context' => array(
 				'label'       => __( 'User context', 'jet-engine' ),
-				'type'        => \Elementor\Controls_Manager::SELECT,
+				'type'        => 'select',
 				'default'     => 'current_user',
 				'options'     => array(
 					'current_user'        => __( 'Current user', 'jet-engine' ),
