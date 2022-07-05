@@ -3,7 +3,7 @@
  * Plugin Name: JetEngine - Custom visibility conditions
  * Plugin URI:
  * Description:
- * Version:     1.1.0
+ * Version:     1.1.1
  * Author:      Crocoblock
  * Author URI:  https://crocoblock.com/
  * Text Domain: jet-appointments-booking
@@ -20,6 +20,8 @@ if ( ! defined( 'WPINC' ) ) {
 add_action( 'plugins_loaded', 'jet_engine_cvc' );
 
 function jet_engine_cvc() {
+
+	define( 'JET_ECVC_VERSION', '1.1.1' );
 
 	define( 'JET_ECVC__FILE__', __FILE__ );
 	define( 'JET_ECVC_PLUGIN_BASE', plugin_basename( JET_ECVC__FILE__ ) );
@@ -40,5 +42,20 @@ function jet_engine_cvc() {
 		$conditions_manager->register_condition( new Jet_Engine_CVC\User_Meta_Is_Post_Meta() );
 
 	} );
+
+	add_action( 'init', function () {
+
+		if ( ! function_exists( 'jet_engine' ) ) {
+			return;
+		}
+
+		$pathinfo = pathinfo( JET_ECVC_PLUGIN_BASE );
+
+		jet_engine()->modules->updater->register_plugin( array(
+			'slug'    => $pathinfo['filename'],
+			'file'    => JET_ECVC_PLUGIN_BASE,
+			'version' => JET_ECVC_VERSION,
+		) );
+	}, 12 );
 
 }
