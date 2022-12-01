@@ -41,7 +41,7 @@ class User_Meta_Is extends \Jet_Engine\Modules\Dynamic_Visibility\Conditions\Bas
 		$type = ! empty( $args['type'] ) ? $args['type'] : 'show';
 		$res  = false;
 
-		if ( is_user_logged_in() ) {
+		if ( is_user_logged_in() || $this->is_users_listings( $args ) ) {
 			$current_value = $this->get_current_value( $args );
 			$res = $current_value == $args['value'];
 		}
@@ -55,6 +55,19 @@ class User_Meta_Is extends \Jet_Engine\Modules\Dynamic_Visibility\Conditions\Bas
 	}
 
 	/**
+	 * Check if is condition use in the users listings.
+	 *
+	 * @param  array $args
+	 * @return bool
+	 */
+	public function is_users_listings( $args = array() ) {
+		$context = ! empty( $args['context'] ) ? $args['context'] : 'default';
+		$object  = jet_engine()->listings->data->get_current_object();
+
+		return 'current_listing' === $context && 'WP_User' === get_class( $object );
+	}
+
+	/**
 	 * Returns current field value by arguments
 	 *
 	 * @param  array  $args [description]
@@ -65,7 +78,14 @@ class User_Meta_Is extends \Jet_Engine\Modules\Dynamic_Visibility\Conditions\Bas
 		$current_value = null;
 
 		if ( ! empty( $args['field_raw'] ) ) {
-			$current_value = get_user_meta( get_current_user_id(), $args['field_raw'], true );
+
+			if ( $this->is_users_listings( $args ) ) {
+				$user_id = jet_engine()->listings->data->get_current_object_id();
+			} else {
+				$user_id = get_current_user_id();
+			}
+
+			$current_value = get_user_meta( $user_id, $args['field_raw'], true );
 		} else {
 			$current_value = $args['field'];
 		}
